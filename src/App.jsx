@@ -4,29 +4,35 @@ import ErrorBoundary from './components/ErrorBoundary'
 import Navbar from './components/Navbar'
 import FloatingWhatsApp from './components/FloatingWhatsApp'
 
-// This ensures that when any link is clicked, the scroll happens immediately without UI sticking.
+// --- PERFORMANCE FIX: CORE SECTIONS LOADED IMMEDIATELY ---
 import Hero from './components/Hero'
-import Services from './components/Services'
-import Programs from './components/Programs'
-import Portfolio from './components/Portfolio'
-import WhyChooseUs from './components/WhyChooseUs'
-import Testimonials from './components/Testimonials'
-import Process from './components/Process'
-import Contact from './components/Contact'
-import Footer from './components/Footer'
+
+// --- OPTIMIZATION: LAZY LOAD SECTIONS WITH SUSPENSE ---
+const Services = lazy(() => import('./components/Services'))
+const Portfolio = lazy(() => import('./components/Portfolio'))
+const WhyChooseUs = lazy(() => import('./components/WhyChooseUs'))
+const Testimonials = lazy(() => import('./components/Testimonials'))
+const Process = lazy(() => import('./components/Process'))
+const Contact = lazy(() => import('./components/Contact'))
+const Footer = lazy(() => import('./components/Footer'))
+const Programs = lazy(() => import('./components/Programs'))
+
+const LoadingFallback = () => <div className="min-h-[200px] flex items-center justify-center text-blue-600 font-medium">Loading Section...</div>
 
 function HomePage() {
   return (
     <div className="overflow-x-hidden">
       <Hero />
-      <Services />
-      <Programs />
-      <Process />
-      <Portfolio />
-      <WhyChooseUs />
-      <Testimonials />
-      <Contact />
-      <Footer />
+      <Suspense fallback={<LoadingFallback />}>
+        <Services />
+        <Programs />
+        <Process />
+        <Portfolio />
+        <WhyChooseUs />
+        <Testimonials />
+        <Contact />
+        <Footer />
+      </Suspense>
     </div>
   )
 }
@@ -42,16 +48,17 @@ function ScrollToSection() {
       return
     }
 
-    // Since components are no longer lazy-loaded, they exist in the DOM immediately.
-    // We use requestAnimationFrame to ensure the DOM is painted before scrolling.
-    window.requestAnimationFrame(() => {
+    // Scroll to the element after a short delay to allow lazy loading
+    const scrollToElement = (retryCount = 0) => {
       const element = document.getElementById(path)
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' })
-      } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else if (retryCount < 15) {
+        setTimeout(() => scrollToElement(retryCount + 1), 100)
       }
-    })
+    }
+
+    scrollToElement()
   }, [pathname, key])
 
   return null
