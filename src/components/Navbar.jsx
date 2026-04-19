@@ -35,15 +35,15 @@ const Navbar = () => {
       <nav className="fixed top-0 w-full bg-white/90 backdrop-blur-xl border-b border-gray-200 z-[50] shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
 
-          {/* LOGO */}
+          {/* LOGO & COMPANY NAME */}
           <Link to="/" className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
             <img
               src={logo}
               alt="Logo"
-              className="h-10 sm:h-12 w-auto object-contain rounded-md"
+              className="h-9 sm:h-12 w-auto object-contain rounded-md"
               loading="eager"
             />
-            <span className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hidden sm:inline">
+            <span className="text-base sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Mahion Tech Solutions
             </span>
           </Link>
@@ -63,7 +63,7 @@ const Navbar = () => {
           {/* MOBILE TOGGLE BUTTON */}
           <button
             onClick={() => setOpen(true)}
-            className="lg:hidden text-3xl text-slate-800 p-2 focus:outline-none"
+            className="lg:hidden text-2xl sm:text-3xl text-slate-800 p-1 focus:outline-none"
             aria-label="Toggle Menu"
           >
             ☰
