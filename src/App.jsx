@@ -4,28 +4,29 @@ import ErrorBoundary from './components/ErrorBoundary'
 import Navbar from './components/Navbar'
 import FloatingWhatsApp from './components/FloatingWhatsApp'
 
-// Critical components - keep static
+// --- PERFORMANCE FIX: LOAD CORE SECTIONS IMMEDIATELY ---
+// Moving these out of lazy load prevents the "stuck" feeling when navigating
 import Hero from './components/Hero'
+import Services from './components/Services'
+import Programs from './components/Programs'
 
-// Non-critical components - lazy load
-const Services = lazy(() => import('./components/Services'))
+// Keep heavy/deep sections lazy loaded
 const Portfolio = lazy(() => import('./components/Portfolio'))
 const WhyChooseUs = lazy(() => import('./components/WhyChooseUs'))
 const Testimonials = lazy(() => import('./components/Testimonials'))
 const Process = lazy(() => import('./components/Process'))
 const Contact = lazy(() => import('./components/Contact'))
 const Footer = lazy(() => import('./components/Footer'))
-const Programs = lazy(() => import('./components/Programs'))
 
-const LoadingFallback = () => <div className="min-h-[200px] flex items-center justify-center text-blue-600 font-medium">Loading Section...</div>
+const LoadingFallback = () => <div className="h-24 flex items-center justify-center text-blue-600 font-medium">Loading Section...</div>
 
 function HomePage() {
   return (
-    <div>
+    <div className="overflow-x-hidden">
       <Hero />
+      <Services />
+      <Programs />
       <Suspense fallback={<LoadingFallback />}>
-        <Services />
-        <Programs />
         <Process />
         <Portfolio />
         <WhyChooseUs />
@@ -43,23 +44,24 @@ function ScrollToSection() {
   React.useEffect(() => {
     const path = pathname.split('/').pop()
 
-    // If we are at the root or explicitly at /home, scroll to top
     if (!path || path === '' || path === 'home') {
       window.scrollTo({ top: 0, behavior: 'smooth' })
       return
     }
 
-    // Otherwise, find the element by ID and scroll to it
-    window.requestAnimationFrame(() => {
+    // Advanced Scroll Logic: Retries if section is still lazy-loading
+    const attemptScroll = (retries = 0) => {
       const element = document.getElementById(path)
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' })
-      } else {
-        // Fallback to top if ID not found
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else if (retries < 15) {
+        // Retry every 100ms for 1.5s to wait for lazy components
+        setTimeout(() => attemptScroll(retries + 1), 100)
       }
-    })
-  }, [pathname, key]) // Added key to trigger on same-path clicks
+    }
+
+    attemptScroll()
+  }, [pathname, key])
 
   return null
 }
