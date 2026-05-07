@@ -21,7 +21,7 @@ const Navbar = () => {
   const links = [
     { name: "Home", path: "/" },
     { name: "Services", path: "/services" },
-    { name: "Programs", path: "/programs" },
+    { name: "Internships", path: "/internships" },
     { name: "Portfolio", path: "/portfolio" },
     { name: "Why Us", path: "/whychooseus" },
     { name: "Contact", path: "/contact" },
@@ -30,46 +30,92 @@ const Navbar = () => {
   const navLinkClass =
     "relative text-slate-800 font-semibold text-base lg:text-lg px-2 transition duration-300 hover:text-blue-600";
 
+  const googleFormLink = "https://docs.google.com/forms/d/e/1FAIpQLSd5sl2QF1GQWqvP9NaaZa5AiSW5wN5QL6UlZKBc-dRvtrci8A/viewform?usp=publish-editor";
+
   return (
     <>
-      <nav className="fixed top-0 w-full bg-white/90 backdrop-blur-xl border-b border-gray-200 z-[50] shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+      <nav className="fixed top-0 w-full bg-white z-[50] shadow-sm">
+        {/* Main Navbar */}
+        <div className="bg-white/90 backdrop-blur-xl border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+            {/* LOGO & COMPANY NAME */}
+            <Link to="/" className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+              <img
+                src={logo}
+                alt="Logo"
+                className="h-9 sm:h-12 w-auto object-contain rounded-md"
+                loading="eager"
+              />
+              <span className="text-base sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Mahion Tech Solutions
+              </span>
+            </Link>
 
-          {/* LOGO & COMPANY NAME */}
-          <Link to="/" className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-            <img
-              src={logo}
-              alt="Logo"
-              className="h-9 sm:h-12 w-auto object-contain rounded-md"
-              loading="eager"
-            />
-            <span className="text-base sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Mahion Tech Solutions
+            {/* DESKTOP MENU */}
+            <ul className="hidden lg:flex items-center gap-8">
+              {links.map((link, i) => (
+                <li key={i} className="relative group">
+                  <Link to={link.path} className={navLinkClass}>
+                    {link.name}
+                  </Link>
+                  <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-300 group-hover:w-full"></span>
+                </li>
+              ))}
+            </ul>
+
+            {/* MOBILE TOGGLE BUTTON */}
+            <button
+              onClick={() => setOpen(true)}
+              className="lg:hidden text-2xl sm:text-3xl text-slate-800 p-1 focus:outline-none"
+              aria-label="Toggle Menu"
+            >
+              ☰
+            </button>
+          </div>
+        </div>
+
+        {/* Announcement Bar */}
+        <div className="bg-gradient-to-r from-blue-600 to-purple-700 text-white overflow-hidden py-2 whitespace-nowrap relative flex items-center">
+          <div className="flex animate-marquee items-center">
+            <span className="mx-4 text-sm sm:text-base font-medium">
+              Apply Now for Internship Opportunities — Limited Seats Available
             </span>
-          </Link>
-
-          {/* DESKTOP MENU */}
-          <ul className="hidden lg:flex items-center gap-8">
-            {links.map((link, i) => (
-              <li key={i} className="relative group">
-                <Link to={link.path} className={navLinkClass}>
-                  {link.name}
-                </Link>
-                <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-300 group-hover:w-full"></span>
-              </li>
-            ))}
-          </ul>
-
-          {/* MOBILE TOGGLE BUTTON */}
-          <button
-            onClick={() => setOpen(true)}
-            className="lg:hidden text-2xl sm:text-3xl text-slate-800 p-1 focus:outline-none"
-            aria-label="Toggle Menu"
-          >
-            ☰
-          </button>
+            <a
+              href={googleFormLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white text-blue-700 px-4 py-1 rounded-full text-xs sm:text-sm font-bold hover:bg-blue-50 transition-colors mx-4 shadow-sm"
+            >
+              Apply Now
+            </a>
+            <span className="mx-4 text-sm sm:text-base font-medium">
+              Apply Now for Internship Opportunities — Limited Seats Available
+            </span>
+            <a
+              href={googleFormLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white text-blue-700 px-4 py-1 rounded-full text-xs sm:text-sm font-bold hover:bg-blue-50 transition-colors mx-4 shadow-sm"
+            >
+              Apply Now
+            </a>
+            <span className="mx-4 text-sm sm:text-base font-medium">
+              Apply Now for Internship Opportunities — Limited Seats Available
+            </span>
+            <a
+              href={googleFormLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white text-blue-700 px-4 py-1 rounded-full text-xs sm:text-sm font-bold hover:bg-blue-50 transition-colors mx-4 shadow-sm"
+            >
+              Apply Now
+            </a>
+          </div>
         </div>
       </nav>
+
+      {/* Spacer to prevent content from going under the fixed navbar */}
+      <div className="h-[100px] sm:h-[120px]"></div>
 
       {/* MOBILE MENU SIDEBAR */}
       <AnimatePresence>
@@ -127,6 +173,21 @@ const Navbar = () => {
           </>
         )}
       </AnimatePresence>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+          display: flex;
+          animation: marquee 25s linear infinite;
+          width: fit-content;
+        }
+        .animate-marquee:hover {
+          animation-play-state: paused;
+        }
+      `}} />
     </>
   );
 };

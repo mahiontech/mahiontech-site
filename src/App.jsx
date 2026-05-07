@@ -15,7 +15,7 @@ const Testimonials = lazy(() => import('./components/Testimonials'))
 const Process = lazy(() => import('./components/Process'))
 const Contact = lazy(() => import('./components/Contact'))
 const Footer = lazy(() => import('./components/Footer'))
-const Programs = lazy(() => import('./components/Programs'))
+const Internships = lazy(() => import('./components/Internships'))
 
 const LoadingFallback = () => <div className="min-h-[200px] flex items-center justify-center text-blue-600 font-medium">Loading Section...</div>
 
@@ -25,7 +25,7 @@ function HomePage() {
       <Hero />
       <Suspense fallback={<LoadingFallback />}>
         <Services />
-        <Programs />
+        <Internships />
         <Process />
         <Portfolio />
         <WhyChooseUs />
@@ -75,7 +75,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/services" element={<HomePage />} />
-            <Route path="/programs" element={<HomePage />} />
+            <Route path="/internships" element={<HomePage />} />
             <Route path="/portfolio" element={<HomePage />} />
             <Route path="/whychooseus" element={<HomePage />} />
             <Route path="/contact" element={<HomePage />} />
